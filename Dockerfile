@@ -7,6 +7,9 @@ RUN npm install
 
 COPY . .
 
+# So @sveltejs/adapter-auto detects node environment
+ENV NODE_ENV=production
+
 RUN npm run build
 
 FROM node:22-alpine AS deployer
