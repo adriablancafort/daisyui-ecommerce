@@ -17,7 +17,6 @@ RUN npm install -g pm2
 
 WORKDIR /app
 
-COPY --from=build /app/package*.json ./
 COPY --from=build /app/build ./build
 
 EXPOSE 3000
