@@ -1,6 +1,8 @@
 <script>
   import "tailwindcss/tailwind.css";
 
+  let { children } = $props()
+  
   let cartOpen = $state(false);
   let cartItems = $state([
     {
@@ -28,7 +30,7 @@
 </script>
 
 <div class="{cartOpen ? "mr-60" : "mr-0"}">
-  <slot />
+  {@render children()}
 </div>
 
 <button onclick={toggleCart} class="fixed top-4 left-4 btn btn-primary">Cart</button>
