@@ -19,8 +19,8 @@ WORKDIR /app
 
 COPY --from=build /app/build ./build
 
-EXPOSE 3000
+ENV NODE_ENV=production PORT=3000
 
-ENV NODE_ENV=production
+EXPOSE 3000
 
 CMD ["pm2-runtime", "start", "build/index.js"]
