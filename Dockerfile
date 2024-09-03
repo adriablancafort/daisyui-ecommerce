@@ -1,25 +1,28 @@
-FROM node:22-alpine AS build
+FROM node:alpine AS build
 
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --only=production
+
+# Clean install
+RUN npm ci
 
 COPY . .
 
-# Some libraries produce an optimized output when NODE_ENV is set to production
-ENV NODE_ENV=production
-
 RUN npm run build
 
-FROM node:22-alpine AS runtime
+# Remove dev dependencies
+RUN npm prune --production
+
+FROM node:alpine AS runtime
 
 RUN npm install -g pm2
 
 WORKDIR /app
 
-COPY --from=build /app/build ./build
 COPY --from=build /app/package*.json ./
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/build ./build
 
 EXPOSE 3000
 
