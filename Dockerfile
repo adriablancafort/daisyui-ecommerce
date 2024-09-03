@@ -5,14 +5,11 @@ WORKDIR /app
 COPY package*.json ./
 
 # Clean install
-RUN npm ci
+RUN npm ci --omit=dev
 
 COPY . .
 
 RUN npm run build
-
-# Remove dev dependencies
-RUN npm prune --production
 
 FROM node:alpine AS runtime
 
@@ -21,7 +18,6 @@ RUN npm install -g pm2
 WORKDIR /app
 
 COPY --from=build /app/package*.json ./
-COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/build ./build
 
 EXPOSE 3000
